@@ -1,149 +1,195 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 
-* {
+/* ========== 基础重置 ========== */
+:root {
+  --bg-dark: rgb(13, 13, 13);
+  --nav-bg: rgb(15, 15, 15);
+  --menu-bg: rgb(23, 23, 23);
+  --accent-color: rgb(205, 146, 20);
+  --text-light: white;
+  --text-gray: rgb(72, 72, 72);
+  --shadow-color: rgba(64, 64, 64, 0.3);
+}
+
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", Arial;
 }
 
+/* ========== 全局样式 ========== */
 body {
-  background-color: rgb(13, 13, 13);
-  -webkit-tap-highlight-color: transparent; /* Disable tap highlight globally */
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
+/* ========== 导航栏 ========== */
 .nav_bar {
-  position: relative; /* Ensure z-index works properly */
-  z-index: 10; /* Increased from -1 to ensure buttons stay clickable */
+  position: relative;
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30px 60px;
-  background-color: rgb(15, 15, 15);
-  color: white;
+  padding: 1.5rem 3rem;
+  background-color: var(--nav-bg);
 }
 
 .logo {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 700;
 }
 
-/* Enhanced touch targets */
-.menu_icon, .close_menu {
+/* ========== 菜单按钮 ========== */
+.menu_icon,
+.close_menu {
   position: relative;
-  padding: 5px;
-  -webkit-tap-highlight-color: transparent;
+  padding: 0.5rem;
   user-select: none;
-  touch-action: manipulation; /* Improve touch responsiveness */
+  -webkit-user-drag: none;
+  touch-action: manipulation;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .menu_icon {
   min-width: 44px;
   min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 2px solid red;
+  display: grid;
+  place-items: center;
   z-index: 30;
 }
 
-/* Invisible hit area expansion */
-.menu_icon::after, .close_menu::after {
-  content: "";
-  position: absolute;
-  top: -15px;
-  left: -15px;
-  right: -15px;
-  bottom: -15px;
+.menu_icon:active {
+  transform: scale(0.95);
 }
 
 .close_menu {
   position: absolute;
-  top: 50px;
-  right: 70px;
-  cursor: pointer;
+  top: 2.5rem;
+  right: 4rem;
+  z-index: 25;
 }
 
+/* ========== 菜单面板 ========== */
 .menu {
+  --menu-transition-duration: 0.4s;
+  
   opacity: 0;
+  visibility: hidden;
   display: flex;
-  justify-content: space-between;
-  background-color: rgb(23, 23, 23);
-  padding: 20px 60px;
-  top: -100%;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--menu-bg);
+  padding: 2rem;
   position: fixed;
-  height: 100vh;
-  width: 100%;
-  align-items: center;
-  z-index: 20; /* Higher than nav_bar */
+  inset: 0;
+  z-index: 20;
+  transition: 
+    opacity var(--menu-transition-duration) ease,
+    visibility 0s linear var(--menu-transition-duration);
+}
+
+.menu.active {
+  opacity: 1;
+  visibility: visible;
+  transition: 
+    opacity var(--menu-transition-duration) ease,
+    visibility 0s linear;
 }
 
 .background {
-  z-index: -1;
   position: absolute;
-  font-size: 14rem;
-  font-weight: bold;
-  color: rgba(64, 64, 64, 0.3);
+  font-size: clamp(8rem, 20vw, 14rem);
+  font-weight: 700;
+  color: var(--shadow-color);
+  z-index: -1;
+  user-select: none;
 }
 
+/* ========== 导航列表 ========== */
 .nav_list {
-  list-style-type: none;
+  list-style: none;
+  margin-bottom: 3rem;
 }
 
-.nav {
-  margin-top: -20px;
+.nav_item {
+  margin: 1.5rem 0;
   opacity: 0;
+  transform: translateY(20px);
+  transition: 
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.menu.active .nav_item {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .nav_link {
-  color: white;
+  display: inline-block;
+  color: var(--text-light);
   text-decoration: none;
-  font-size: 3rem;
-  padding: 0px 20px;
-  display: inline-block; /* Better touch target for links */
+  font-size: clamp(2rem, 5vw, 3rem);
+  padding: 0.5rem 1rem;
   position: relative;
+  transition: color 0.2s ease;
 }
 
 .nav_link:hover {
-  color: rgb(72, 72, 72);
-  transition: 0.2s ease-in-out;
+  color: var(--text-gray);
 }
 
 .number {
-  font-size: 1.5rem;
-  padding: 0 10px;
+  font-size: 1rem;
+  padding: 0 0.5rem;
+  opacity: 0.7;
+}
+
+/* ========== 菜单信息 ========== */
+.menu-info {
+  margin-top: auto;
 }
 
 .info {
-  color: white;
+  margin-bottom: 1.5rem;
 }
 
-.title {
-  color: rgb(205, 146, 20);
-  font-size: 2rem;
+.info .title {
+  color: var(--accent-color);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.content {
-  padding-bottom: 20px;
-}
-
-/* Mobile responsiveness */
+/* ========== 响应式设计 ========== */
 @media (max-width: 768px) {
   .nav_bar {
-    padding: 20px 30px;
+    padding: 1.25rem 1.5rem;
   }
   
   .close_menu {
-    top: 30px;
-    right: 30px;
+    top: 2rem;
+    right: 2rem;
   }
   
   .menu {
-    padding: 20px 30px;
+    padding: 1.5rem;
   }
   
   .nav_link {
     font-size: 2rem;
+  }
+}
+
+@media (hover: none) {
+  .nav_link:hover {
+    color: var(--text-light);
   }
 }

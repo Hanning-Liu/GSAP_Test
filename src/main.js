@@ -1,66 +1,79 @@
 import { gsap } from "gsap";
 
-// 调试代码：检测全局触摸事件
-document.addEventListener('touchstart', (e) => {
-  console.log('全局触摸触发于:', e.target);
-}, { passive: true });
-
-// 更健壮的元素选择（避免 null 错误）
+// 获取DOM元素
 const menuBtn = document.querySelector(".menu_icon");
 const closeBtn = document.querySelector(".close_menu");
-const name = document.querySelector(".logo");
+const menu = document.querySelector(".menu");
+const navItems = document.querySelectorAll(".nav_item");
+const background = document.querySelector(".background");
 
-// 检查元素是否存在（调试用）
-if (!menuBtn || !closeBtn) {
-  console.error("按钮元素未找到！请检查类名是否正确。");
-}
+// 初始化菜单状态
+gsap.set(menu, { 
+  y: "-100%", 
+  opacity: 0,
+  visibility: "hidden" 
+});
 
-// GSAP 动画时间线
-let t1 = gsap.timeline({ 
+// 创建主时间线
+const menuTimeline = gsap.timeline({
   paused: true,
+  defaults: { ease: "power3.inOut" },
   onReverseComplete: () => {
-    // 动画反向完成后重置菜单状态（可选）
-    gsap.set(".menu", { opacity: 0, top: "-100%" });
+    menu.style.visibility = "hidden";
+    gsap.set(menu, { y: "-100%" }); // 重置位置
   }
 });
 
-t1.to(".menu", { 
-  opacity: 1, 
-  duration: 0.8, 
-  top: 0,
-  ease: "power3.out"
-})
-.to(".nav", { 
-  opacity: 1, 
-  duration: 0.6, 
-  stagger: 0.15, 
-  marginTop: 0 
-}, "-=0.3"); // 与前一动画重叠
+// 动画序列
+menuTimeline
+  .to(menu, {
+    y: "0%",
+    opacity: 1,
+    visibility: "visible",
+    duration: 0.8
+  })
+  .fromTo(navItems,
+    { opacity: 0, y: 20 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: "back.out(1.2)"
+    },
+    "-=0.4" // 与上一步动画重叠
+  )
+  .from(background, {
+    y: 50,
+    opacity: 0,
+    duration: 0.8
+  }, "-=0.8");
 
-// 统一事件处理函数
+// 菜单切换函数
 function toggleMenu(e) {
-  if (e) e.preventDefault(); // 阻止默认行为（如链接跳转）
-  if (t1.reversed() || t1.paused()) {
-    t1.timeScale(1).play();
+  if (e) e.preventDefault();
+  
+  if (menuTimeline.reversed()) {
+    menu.style.visibility = "visible";
+    menuTimeline.play();
   } else {
-    t1.timeScale(1.5).reverse();
+    menuTimeline.reverse();
   }
 }
 
-// 添加事件监听（支持触摸和点击）
-const events = ["click", "touchstart"];
-events.forEach(event => {
-  menuBtn?.addEventListener(event, toggleMenu, { passive: false });
-  closeBtn?.addEventListener(event, toggleMenu, { passive: false });
-});
-name.addEventListener('touchstart', () => {
-  alert('触摸已触发！'); // 真机会显示弹窗
+// 添加事件监听
+[menuBtn, closeBtn].forEach(btn => {
+  if (!btn) return;
+  
+  btn.addEventListener("click", toggleMenu);
+  btn.addEventListener("touchstart", toggleMenu, { passive: false });
 });
 
-// 可选：禁用滚动当菜单打开
-t1.eventCallback("onStart", () => {
-  document.body.style.overflow = "hidden";
-});
-t1.eventCallback("onReverseComplete", () => {
-  document.body.style.overflow = "";
+// 响应式处理
+window.addEventListener("resize", () => {
+  if (window.innerWidth >= 768 && menuTimeline.progress() !== 0) {
+    menuTimeline.progress(0).pause();
+    menu.style.visibility = "hidden";
+    gsap.set(menu, { y: "-100%" });
+  }
 });
