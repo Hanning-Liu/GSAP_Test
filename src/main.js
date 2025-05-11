@@ -8,6 +8,7 @@ document.addEventListener('touchstart', (e) => {
 // 更健壮的元素选择（避免 null 错误）
 const menuBtn = document.querySelector(".menu_icon");
 const closeBtn = document.querySelector(".close_menu");
+const name = document.querySelector(".logo");
 
 // 检查元素是否存在（调试用）
 if (!menuBtn || !closeBtn) {
@@ -52,9 +53,10 @@ events.forEach(event => {
   menuBtn?.addEventListener(event, toggleMenu, { passive: false });
   closeBtn?.addEventListener(event, toggleMenu, { passive: false });
 });
-menuBtn.addEventListener('touchstart', () => {
+name.addEventListener('touchstart', () => {
   alert('触摸已触发！'); // 真机会显示弹窗
 });
+
 // 可选：禁用滚动当菜单打开
 t1.eventCallback("onStart", () => {
   document.body.style.overflow = "hidden";
