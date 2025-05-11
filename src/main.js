@@ -52,7 +52,9 @@ events.forEach(event => {
   menuBtn?.addEventListener(event, toggleMenu, { passive: false });
   closeBtn?.addEventListener(event, toggleMenu, { passive: false });
 });
-
+menuBtn.addEventListener('touchstart', () => {
+  alert('触摸已触发！'); // 真机会显示弹窗
+});
 // 可选：禁用滚动当菜单打开
 t1.eventCallback("onStart", () => {
   document.body.style.overflow = "hidden";
