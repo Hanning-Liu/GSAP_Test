@@ -29,7 +29,27 @@ body {
 .menu_icon:hover {
   cursor: pointer;
 }
-
+.menu_icon, .close_menu {
+  padding: 15px; /* Increase touch area */
+  -webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove tap highlight */
+  user-select: none; /* Prevent text selection */
+}
+/* Ensure the button is large enough for touch */
+.menu_icon {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.close_menu {
+  position: absolute;
+  top: 50px;
+  right: 70px;
+}
+.close_menu:hover {
+  cursor: pointer;
+}
 
 .menu {
   opacity: 0;
@@ -51,14 +71,6 @@ body {
   color: rgba(64, 64, 64, 0.3);
 }
 
-.close_menu {
-  position: absolute;
-  top: 50px;
-  right: 70px;
-}
-.close_menu:hover {
-  cursor: pointer;
-}
 
 .nav_list {
   list-style-type: none;
