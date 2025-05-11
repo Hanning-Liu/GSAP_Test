@@ -31,7 +31,7 @@ body {
 /* Enhanced touch targets */
 .menu_icon, .close_menu {
   position: relative;
-  padding: 15px;
+  padding: 5px;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   touch-action: manipulation; /* Improve touch responsiveness */
