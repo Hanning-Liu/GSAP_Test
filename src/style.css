@@ -44,7 +44,8 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border: 2px solid red
+  border: 2px solid red;
+  z-index: 30;
 }
 
 /* Invisible hit area expansion */

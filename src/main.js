@@ -1,5 +1,10 @@
 import { gsap } from "gsap";
 
+// 调试代码：检测全局触摸事件
+document.addEventListener('touchstart', (e) => {
+  console.log('全局触摸触发于:', e.target);
+}, { passive: true });
+
 // 更健壮的元素选择（避免 null 错误）
 const menuBtn = document.querySelector(".menu_icon");
 const closeBtn = document.querySelector(".close_menu");
