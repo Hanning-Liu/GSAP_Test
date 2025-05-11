@@ -53,8 +53,8 @@ body {
 
 .close_menu {
   position: absolute;
-  top: 60px;
-  right: 60px;
+  top: 50px;
+  right: 70px;
 }
 .close_menu:hover {
   cursor: pointer;
