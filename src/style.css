@@ -8,16 +8,18 @@
 }
 
 body {
-  background-color:rgb(13, 13, 13);
+  background-color: rgb(13, 13, 13);
+  -webkit-tap-highlight-color: transparent; /* Disable tap highlight globally */
 }
 
 .nav_bar {
-  z-index: -1;
+  position: relative; /* Ensure z-index works properly */
+  z-index: 10; /* Increased from -1 to ensure buttons stay clickable */
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 30px 60px;
-  background-color:rgb(15, 15, 15);
+  background-color: rgb(15, 15, 15);
   color: white;
 }
 
@@ -26,28 +28,38 @@ body {
   font-weight: bold;
 }
 
-.menu_icon:hover {
-  cursor: pointer;
-}
+/* Enhanced touch targets */
 .menu_icon, .close_menu {
-  padding: 5px; /* Increase touch area */
-  -webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove tap highlight */
-  user-select: none; /* Prevent text selection */
+  position: relative;
+  padding: 5px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation; /* Improve touch responsiveness */
 }
-/* Ensure the button is large enough for touch */
+
 .menu_icon {
   min-width: 44px;
   min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
+
+/* Invisible hit area expansion */
+.menu_icon::after, .close_menu::after {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+}
+
 .close_menu {
   position: absolute;
   top: 50px;
   right: 70px;
-}
-.close_menu:hover {
   cursor: pointer;
 }
 
@@ -55,14 +67,16 @@ body {
   opacity: 0;
   display: flex;
   justify-content: space-between;
-  background-color:rgb(23, 23, 23);
+  background-color: rgb(23, 23, 23);
   padding: 20px 60px;
   top: -100%;
   position: fixed;
   height: 100vh;
   width: 100%;
   align-items: center;
+  z-index: 20; /* Higher than nav_bar */
 }
+
 .background {
   z-index: -1;
   position: absolute;
@@ -70,7 +84,6 @@ body {
   font-weight: bold;
   color: rgba(64, 64, 64, 0.3);
 }
-
 
 .nav_list {
   list-style-type: none;
@@ -86,12 +99,15 @@ body {
   text-decoration: none;
   font-size: 3rem;
   padding: 0px 20px;
+  display: inline-block; /* Better touch target for links */
+  position: relative;
 }
 
 .nav_link:hover {
-  color:rgb(72, 72, 72);
+  color: rgb(72, 72, 72);
   transition: 0.2s ease-in-out;
 }
+
 .number {
   font-size: 1.5rem;
   padding: 0 10px;
@@ -100,10 +116,32 @@ body {
 .info {
   color: white;
 }
+
 .title {
   color: rgb(205, 146, 20);
   font-size: 2rem;
 }
-.content{
-  padding-bottom: 20px
+
+.content {
+  padding-bottom: 20px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .nav_bar {
+    padding: 20px 30px;
   }
+  
+  .close_menu {
+    top: 30px;
+    right: 30px;
+  }
+  
+  .menu {
+    padding: 20px 30px;
+  }
+  
+  .nav_link {
+    font-size: 2rem;
+  }
+}
